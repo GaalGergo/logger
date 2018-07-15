@@ -1,0 +1,12 @@
+{
+  "loggers" : [{
+    "type" : "console",
+    "name" : "name",
+    "format" : "[name] [timestamp] [message]"
+  },{
+    "type" : "file",
+    "name" : "name",
+    "format" : "[name] [timestamp] [message]",
+    "path" : "C:\\Users\\Gergo\\logger\\file.log"
+  }]
+}
