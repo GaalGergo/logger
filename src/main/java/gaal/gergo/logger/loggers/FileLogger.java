@@ -1,28 +1,18 @@
 package gaal.gergo.logger.loggers;
 
+import gaal.gergo.logger.config.LoggerConfig;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
-import java.util.Date;
 
-public class FileLogger implements Logger {
-    private String name;
-    private String format;
+public class FileLogger extends BasicLogger{
     private String path;
 
-    public FileLogger(String name, String format, String path) {
-        this.name = name;
-        this.format = format;
-        this.path = path;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getFormat() {
-        return format;
+    public FileLogger(LoggerConfig loggerConfig, String level) {
+        super(loggerConfig, level);
+        this.path = loggerConfig.getPath();
     }
 
     public void info(String message) throws FileNotFoundException {
@@ -30,13 +20,9 @@ public class FileLogger implements Logger {
     }
 
     public void error(String message) throws FileNotFoundException {
-        fileWriter(message);
-    }
-
-    private String formatMessage(String message){
-        return format.replace("[timestamp]", new Date().toString())
-                .replace("[name]", this.name)
-                .replace("[message]", message);
+        if("error".equals(getLevel())){
+            fileWriter(message);
+        }
     }
 
     private void fileWriter(String message) throws FileNotFoundException {
@@ -44,13 +30,5 @@ public class FileLogger implements Logger {
         PrintWriter printWriter = new PrintWriter(new FileOutputStream(file, true));
         printWriter.append(formatMessage(message)).println();
         printWriter.close();
-    }
-
-    @Override
-    public String toString() {
-        return "ConsoleLogger{" +
-                "name='" + name + '\'' +
-                ", format='" + format + '\'' +
-                '}';
     }
 }

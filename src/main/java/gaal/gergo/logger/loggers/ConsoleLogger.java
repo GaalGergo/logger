@@ -1,23 +1,14 @@
 package gaal.gergo.logger.loggers;
 
-import java.util.Date;
+import gaal.gergo.logger.config.LoggerConfig;
+import gaal.gergo.logger.config.LoggersConfig;
 
-public class ConsoleLogger implements Logger {
+import java.sql.SQLOutput;
 
-    private String name;
-    private String format;
+public class ConsoleLogger extends BasicLogger{
 
-    public ConsoleLogger(String name, String format) {
-        this.name = name;
-        this.format = format;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getFormat() {
-        return format;
+    public ConsoleLogger(LoggerConfig loggerConfig, String level) {
+        super(loggerConfig, level);
     }
 
     public void info(String message){
@@ -25,20 +16,9 @@ public class ConsoleLogger implements Logger {
     }
 
     public void error(String message){
-        System.err.println(formatMessage(message));
+        if(("error".equals(getLevel()))){
+            System.err.println(formatMessage(message));
+        }
     }
 
-    private String formatMessage(String message){
-        return format.replace("[timestamp]", new Date().toString())
-                .replace("[name]", this.name)
-                .replace("[message]", message);
-    }
-
-    @Override
-    public String toString() {
-        return "ConsoleLogger{" +
-                "name='" + name + '\'' +
-                ", format='" + format + '\'' +
-                '}';
-    }
 }

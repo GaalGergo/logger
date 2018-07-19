@@ -17,6 +17,8 @@ import java.util.List;
 
 public class LoggerFactory {
 
+    private static ObjectMapper om = new ObjectMapper();
+
     public static List<Logger> getLoggers() throws IOException, URISyntaxException {
         return getLoggers("config.json");
     }
@@ -24,16 +26,15 @@ public class LoggerFactory {
     public static List<Logger> getLoggers(String configFile) throws URISyntaxException, IOException {
         Path path = Paths.get(LoggerFactory.class.getClassLoader().getResource(configFile).toURI());
         String content = new String(Files.readAllBytes(path));
-        ObjectMapper om = new ObjectMapper();
         LoggersConfig logconfig = om.readValue(content, LoggersConfig.class);
         List<Logger> loggers = new ArrayList<>();
         for (LoggerConfig loggerConfig : logconfig.getLoggers()) {
             switch (loggerConfig.getType()){
                 case "console":
-                    loggers.add(new ConsoleLogger(loggerConfig.getName(), loggerConfig.getFormat()));
+                    loggers.add(new ConsoleLogger(loggerConfig, logconfig.getLevel()));
                     break;
                 case "file" :
-                    loggers.add(new FileLogger(loggerConfig.getName(), loggerConfig.getFormat(), loggerConfig.getPath()));
+                    loggers.add(new FileLogger(loggerConfig, logconfig.getLevel()));
             }
         }
         return loggers;
