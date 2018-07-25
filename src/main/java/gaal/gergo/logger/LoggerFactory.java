@@ -34,7 +34,7 @@ public class LoggerFactory {
                     loggers.add(new ConsoleLogger(loggerConfig, logconfig.getLevel()));
                     break;
                 case "file" :
-                    loggers.add(new FileLogger(loggerConfig, logconfig.getLevel()));
+                    loggers.add(new FileLogger(loggerConfig, logconfig.getLevel(), LoggerFactory.class.getName()));
             }
         }
         return loggers;

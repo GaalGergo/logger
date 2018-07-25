@@ -9,14 +9,16 @@ import java.io.PrintWriter;
 
 public class FileLogger extends BasicLogger{
     private String path;
+    private String fullName;
 
-    public FileLogger(LoggerConfig loggerConfig, String level) {
+    public FileLogger(LoggerConfig loggerConfig, String level, String fullName) {
         super(loggerConfig, level);
         this.path = loggerConfig.getPath();
+        this.fullName = fullName;
     }
 
     public void info(String message) throws FileNotFoundException {
-        fileWriter(message);
+        fileWriter(fullName + " " + message);
     }
 
     public void error(String message) throws FileNotFoundException {
@@ -30,5 +32,9 @@ public class FileLogger extends BasicLogger{
         PrintWriter printWriter = new PrintWriter(new FileOutputStream(file, true));
         printWriter.append(formatMessage(message)).println();
         printWriter.close();
+    }
+
+    public static FileLoggerBuilder builder(){
+        return new FileLoggerBuilder();
     }
 }
